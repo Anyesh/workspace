@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 from tinydb import Query, TinyDB
 from workspace.entity.ticket import Ticket
 from workspace.interface.repository import BaseRepository

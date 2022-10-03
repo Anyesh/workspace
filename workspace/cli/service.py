@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 import inquirer
 from git.exc import GitCommandError
 from rich.console import Console

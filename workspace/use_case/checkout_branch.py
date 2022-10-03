@@ -7,7 +7,7 @@ class CheckoutBranch:
     def __init__(self, repository: AbstractGitRepository):
         self._repository = repository
 
-    def execute(self, input_dto: CheckoutBranchInputDto):
+    def execute(self, input_dto: CheckoutBranchInputDto) -> None:
 
         branch = Branch(name=input_dto.name)
         self._repository.stash()

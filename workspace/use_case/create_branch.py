@@ -7,7 +7,7 @@ class CreateBranch:
     def __init__(self, repository: AbstractGitRepository):
         self._repository = repository
 
-    def execute(self, input_dto: CreateBranchInputDto):
+    def execute(self, input_dto: CreateBranchInputDto) -> None:
 
         branch = Branch(
             name=input_dto.name,

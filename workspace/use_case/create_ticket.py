@@ -7,7 +7,7 @@ class CreateTicket:
     def __init__(self, repository: JSONRepository):
         self._repository = repository
 
-    def execute(self, input_dto: CreateTicketInputDto):
+    def execute(self, input_dto: CreateTicketInputDto) -> Ticket:
 
         ticket = Ticket(
             id=input_dto.id,
