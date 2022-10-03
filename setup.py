@@ -15,9 +15,9 @@ setup(
     packages=find_packages(exclude=["tests"]),
     install_requires=read_file("requirements.txt").splitlines(),
     entry_points={
-        "console_scripts": ["workplace=run:cli"],
+        "console_scripts": ["ws=run:cli"],
     },
-    package_data={"": ["config.yaml", "README.md"]},
+    package_data={"": [""]},
     include_package_data=True,
     zip_safe=False,
 )
