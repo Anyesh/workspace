@@ -1,6 +1,6 @@
 from dataclasses import dataclass, field
 
-from workspace.entity.task import TaskType
+from .task import TaskType
 
 
 @dataclass(kw_only=True, slots=True)
