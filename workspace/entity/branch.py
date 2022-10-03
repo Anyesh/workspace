@@ -2,7 +2,7 @@ from dataclasses import dataclass, field
 from datetime import datetime
 
 
-@dataclass(slots=True, frozen=True)
+@dataclass(frozen=True)
 class Branch:
     name: str
     base_branch: str = field(default="develop")

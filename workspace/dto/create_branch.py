@@ -1,18 +1,18 @@
 from dataclasses import dataclass
 
 
-@dataclass(slots=True)
+@dataclass
 class CreateBranchInputDto:
     name: str
     base_branch: str
 
 
-@dataclass(slots=True)
+@dataclass
 class CheckoutBranchInputDto:
     name: str
 
 
-@dataclass(slots=True)
+@dataclass
 class AnswersToCreateBranchInputDto:
     apps: list
     ticket_id: str
@@ -20,7 +20,7 @@ class AnswersToCreateBranchInputDto:
     ticket_type: str
 
 
-@dataclass(slots=True)
+@dataclass
 class AnswersToChangeBranchInputDto:
     apps: list
     ticket_id: str
