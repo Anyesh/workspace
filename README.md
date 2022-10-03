@@ -5,4 +5,4 @@
 </p>
 
 <h1 align="center">Workspace</h1>
-<p align="center">You are your only limit.</p>
+<p align="center">Easy way to change back-and-forth between different git branches that you are working on.</p>

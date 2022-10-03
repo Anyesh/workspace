@@ -48,12 +48,14 @@ class SubModuleRepository(GitRepository):
         super().__init__(repo)
 
     @lru_cache
-    def list(self) -> list[str]:
+    def list(self, detailed=False) -> list[str]:
         res = self.repo.git.execute(
             ["git", "submodule", "status"],
             with_extended_output=False,
             as_process=False,
             stdout_as_string=True,
         )
-        commit, module, tag = zip(*[x.split() for x in res.split("\n")])
+        if detailed:
+            return res.split("\n")
+        _, module, _ = zip(*[x.split() for x in res.split("\n")])
         return list(module)
