@@ -1,6 +1,5 @@
 argh==0.26.2
 astroid==2.12.10
-black==22.8.0
 blessed==1.19.1
 click-completion==0.5.2
 click-default-group==1.2.2
@@ -17,14 +16,11 @@ Jinja2==3.1.2
 lazy-object-proxy==1.7.1
 MarkupSafe==2.1.1
 mccabe==0.7.0
-mypy==0.981
-mypy-extensions==0.4.3
 pathspec==0.10.1
 platformdirs==2.5.2
 pluggy==1.0.0
 pprintpp==0.4.0
 Pygments==2.13.0
-pylint==2.15.3
 python-dotenv==0.21.0
 python-editor==1.0.4
 PyYAML==6.0
@@ -37,7 +33,6 @@ tinydb==4.7.0
 tomli==2.0.1
 tomlkit==0.11.5
 types-PyYAML==6.0.12
-typing_extensions==4.3.0
 ward==0.66.1b0
 wcwidth==0.2.5
 Werkzeug==2.2.2
