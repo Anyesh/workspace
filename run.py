@@ -1,9 +1,4 @@
-import argh
-
-from workspace import app
+from workspace import cli
 
 if __name__ == "__main__":
-    try:
-        argh.dispatch_command(app)
-    except KeyboardInterrupt:
-        print("See ya!")
+    cli()
