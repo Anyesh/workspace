@@ -40,7 +40,10 @@ class GitRepository(AbstractGitRepository):
 
     @lru_cache
     def list(self) -> list[str]:
-        return [ref.strip() for ref in self.repo.git.branch("-a").split("\n")]
+        return [
+            ref.replace("*", "").strip()
+            for ref in self.repo.git.branch("-a").split("\n")
+        ]
 
 
 class SubModuleRepository(GitRepository):
