@@ -50,7 +50,7 @@ Looks like this is your first time here
 
 ```bash
 ❯ ws create
-[15:00:45] 😃 Hello there anyesh!                                                                                                                                                                                                     cli.py:109
+[15:00:45] 😃 Hello there <user>!                                                                                                                                                                                                     cli.py:109
 [?] Which Jira ticket are you working on?: tset-01
 [?] Which apps are you working on?:
    X submodule_1

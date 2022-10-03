@@ -33,3 +33,10 @@ def get_or_create_env(key: str, value: str):
 
 def is_first_time_user():
     return not os.path.exists(ENVDIR)
+
+
+def get_loggedin_user():
+    try:
+        return os.getlogin()
+    except OSError:
+        return "friend"

@@ -24,12 +24,12 @@ from .settings import BASEDIR, DEBUG
 from .use_case.checkout_branch import CheckoutBranch
 from .use_case.create_branch import CreateBranch
 from .use_case.create_ticket import CreateTicket
-from .utils import get_or_create_env, is_first_time_user
+from .utils import get_loggedin_user, get_or_create_env, is_first_time_user
 
 console = Console()
 pretty.install()
 traceback.install(show_locals=False)
-user = os.getlogin()
+user = get_loggedin_user()
 
 
 class ACTIONS(Enum):
@@ -106,7 +106,7 @@ class CLIHandler:
 
 class CLIAssistant:
     def __init__(self, action: str) -> None:
-        console.log(f":smiley: Hello there {user or 'friend'}!", style="bold green")
+        console.log(f":smiley: Hello there {user}!", style="bold green")
 
         self.alaya_root: str | None = None
         self.action = action
