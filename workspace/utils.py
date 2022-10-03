@@ -20,7 +20,7 @@ def parse_env() -> dict:
 
 def write_env(key: str, value: str):
     with open(ENVDIR, "a+") as f:
-        f.write(f"{key}={value}")
+        f.write(f"{key}={value.strip('%')}\n")
 
 
 def get_or_create_env(key: str, value: str):

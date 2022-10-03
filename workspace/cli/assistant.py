@@ -30,7 +30,7 @@ class CLIAssistant:
 
         self.__alaya_root: str | None = None
         self.__action = action
-        self.__root_repository = None
+        self.__root_repository: SubModuleRepository | None = None
 
     def get_project_root(self):
         return (
