@@ -119,3 +119,7 @@ Your submodules status are:
 
 [13:44:20] ✓ All done! 🍀
 ```
+
+---
+
+If anything goes wrong, delete the `.workspace` folder in your home directory and try again.
