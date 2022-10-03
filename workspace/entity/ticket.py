@@ -3,7 +3,7 @@ from dataclasses import dataclass, field
 from .task import TaskType
 
 
-@dataclass(kw_only=True, slots=True)
+@dataclass(slots=True)
 class Ticket:
     id: str
     description: str
