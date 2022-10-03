@@ -58,6 +58,7 @@ class CLIService:
             console.log(f"⚙ creating branch on {app} ..", style="bold blue")
             repository = GitRepository(f"{self.__project_root}/{app}")
 
+            # TODO: Remove this coupling
             questions = [
                 inquirer.List(
                     "base_branch",

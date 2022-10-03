@@ -1,10 +1,10 @@
 from workspace.dto.create_ticket import CreateTicketInputDto
 from workspace.entity.ticket import Ticket
-from workspace.repository.json_repository import JSONRepository
+from workspace.interface.repository import BaseRepository
 
 
 class CreateTicket:
-    def __init__(self, repository: JSONRepository):
+    def __init__(self, repository: BaseRepository):
         self._repository = repository
 
     def execute(self, input_dto: CreateTicketInputDto) -> Ticket:

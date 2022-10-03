@@ -7,6 +7,7 @@ from workspace.entity.branch import Branch
 from workspace.interface.repository import AbstractGitRepository
 
 
+# TODO: Modify repository to return Branch instance on get and list
 class GitRepository(AbstractGitRepository):
     def __init__(self, repo: str) -> None:
         self.repo = Repo(repo)

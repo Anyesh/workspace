@@ -91,7 +91,7 @@ Output:
 
 ```bash
 ❯ ws change
-[15:02:50] 😃 Hello there anyesh!                                                                                                                                                                                                     cli.py:109
+[15:02:50] 😃 Hello there <user>!                                                                                                                                                                                                     cli.py:109
 [?] Which Jira ticket are you working on?: aus-05
 [?] Which apps are you working on?:
    X submodule_1
