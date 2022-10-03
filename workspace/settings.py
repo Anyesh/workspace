@@ -5,5 +5,6 @@ from dotenv import load_dotenv
 load_dotenv()
 
 DEBUG = False
-BASEDIR = Path(__file__).resolve().parent.parent
+BASEDIR = Path.home() / ".workspace"
+BASEDIR.mkdir(exist_ok=True)
 ENVDIR = BASEDIR / ".env"

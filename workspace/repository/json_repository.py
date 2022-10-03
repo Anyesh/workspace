@@ -3,11 +3,12 @@ from __future__ import annotations
 from tinydb import Query, TinyDB
 from workspace.entity.ticket import Ticket
 from workspace.interface.repository import BaseRepository
+from workspace.settings import BASEDIR
 
 
 class JSONRepository(BaseRepository):
     def __init__(self, repo=None) -> None:
-        self.db = TinyDB("db.json")
+        self.db = TinyDB(str(BASEDIR / "db.json"))
 
     def create(self, entity: Ticket):
         self.db.insert(

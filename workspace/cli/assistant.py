@@ -4,6 +4,7 @@ import os
 import re
 
 import inquirer
+from git import InvalidGitRepositoryError
 from git.exc import GitCommandError
 from rich.columns import Columns
 from rich.console import Console
@@ -129,7 +130,10 @@ class CLIAssistant:
                     Columns(self.__root_repository.list(detailed=True)),
                     style="bold green",
                 )
-
+        except KeyboardInterrupt:
+            console.print("Seeya! Exiting...", style="green")
+        except InvalidGitRepositoryError:
+            console.print("Invalid git repository provided", style="red")
         except (ValueError, GitCommandError):
             console.print_exception()
         else:
