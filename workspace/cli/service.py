@@ -11,10 +11,8 @@ from ..dto.create_branch import (
     CreateBranchInputDto,
 )
 from ..dto.create_ticket import CreateTicketInputDto
-from ..entity.task import TaskType
 from ..repository.git_repository import GitRepository
 from ..repository.json_repository import JSONRepository
-from ..settings import BASEDIR, DEBUG
 from ..use_case.checkout_branch import CheckoutBranch
 from ..use_case.create_branch import CreateBranch
 from ..use_case.create_ticket import CreateTicket
