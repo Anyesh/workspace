@@ -11,21 +11,21 @@
 
 There are many ways to install `workspace`.
 
-1. You can download this repo and run
+You can install it directly from github
+
+```bash
+pip install git+https://github.com/Anyesh/workspace@develop#egg=workspace
+```
+
+OR
+
+You can download this repo and run
 
 ```bash
 pip install -e .
 ```
 
 from the root directory.
-
-OR
-
-2. You can install it directly from github
-
-```bash
-pip install git+https://github.com/Anyesh/workspace@develop#egg=workplace
-```
 
 # Usage
 
