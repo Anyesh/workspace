@@ -15,7 +15,7 @@ setup(
     packages=find_packages(exclude=["tests"]),
     install_requires=read_file("requirements.txt").splitlines(),
     entry_points={
-        "console_scripts": ["ws=workspace.cli"],
+        "console_scripts": ["ws=workspace.cli:cli"],
     },
     package_data={"": ["README.md"]},
     include_package_data=True,
