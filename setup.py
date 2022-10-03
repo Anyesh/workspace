@@ -17,7 +17,7 @@ setup(
     entry_points={
         "console_scripts": ["ws=run:cli"],
     },
-    package_data={"": [""]},
+    package_data={"": ["run.py", "README.md"]},
     include_package_data=True,
     zip_safe=False,
 )

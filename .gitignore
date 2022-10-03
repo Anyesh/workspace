@@ -4,3 +4,4 @@ __pycache__
 db.json
 .vscode
 *.egg-info
+tmp
