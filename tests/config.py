@@ -3,7 +3,7 @@ from pathlib import Path
 
 from git import Repo
 from ward import fixture
-from workspace.interface.repository import AbstractGitRepository
+from workspace.interface.repository import BaseRepository
 
 
 class FakeGitDir:
@@ -20,11 +20,16 @@ class FakeGitDir:
 
         repo = Repo.init(self.git_dir)
 
+        (self.git_dir / "repo_sub_file1").touch()
+        (self.git_dir / "repo_sub_file2").touch()
+        repo.index.add(["repo_sub_file1", "repo_sub_file2"])
+        repo.index.commit("initial commit from repo")
+
         submodule_1_repo = Repo.init(submodule_1)
         (submodule_1 / "sub_file1").touch()
         (submodule_1 / "sub_file2").touch()
         submodule_1_repo.index.add(["sub_file1", "sub_file2"])
-        submodule_1_repo.index.commit("initial commit 1")
+        submodule_1_repo.index.commit("initial commit from submodule 1")
         repo.git.submodule("add", str(submodule_1))
         submodule_1_repo.git.submodule("init")
         submodule_1_repo.index.commit("submodule 1 added")
@@ -33,7 +38,7 @@ class FakeGitDir:
         (submodule_2 / "sub_file1").touch()
         (submodule_2 / "sub_file2").touch()
         submodule_2_repo.index.add(["sub_file1", "sub_file2"])
-        submodule_2_repo.index.commit("initial commit 2")
+        submodule_2_repo.index.commit("initial commit  from submodule 2")
         repo.git.submodule("add", str(submodule_2))
         submodule_2_repo.git.submodule("init")
         submodule_2_repo.index.commit("submodule 2 added")
@@ -49,7 +54,7 @@ class FakeGitDir:
             shutil.rmtree(self.git_dir)
 
 
-class FakeBranchRepository(AbstractGitRepository, list):
+class FakeBranchRepository(BaseRepository, list):
     def __init__(self, repo: str) -> None:
         self.repo = repo
 
@@ -57,26 +62,26 @@ class FakeBranchRepository(AbstractGitRepository, list):
         self.append(entity)
 
     def stash(self):
-        pass
+        self.append("stash")
 
     def stash_pop(self, entity):
-        pass
+        self.append("stash_pop")
 
     def pull(self):
-        pass
+        self.append("pull")
 
-    def get(self) -> str:
+    def get(self):
         return self[-1]
 
     def set(self, entity_name: str):
-        pass
+        self.append(entity_name)
 
     def list(self) -> list[str]:
         return self
 
 
 @fixture
-def fake_branch_repo():
+def fake_repo():
     repo = FakeBranchRepository("/repo")
     yield repo
     repo.clear()

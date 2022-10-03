@@ -1,6 +1,6 @@
 from dataclasses import FrozenInstanceError
 
-from tests.config import fake_branch_repo
+from tests.config import fake_repo
 from ward import raises, test
 from workspace.dto.create_branch import CreateBranchInputDto
 from workspace.entity.branch import Branch
@@ -8,7 +8,7 @@ from workspace.use_case.create_branch import CreateBranch
 
 
 @test("create a branch happy path")
-def _(repo=fake_branch_repo):
+def _(repo=fake_repo):
     input_dto = CreateBranchInputDto(name="story/AUS-101", base_branch="develop")
     CreateBranch(repo).execute(input_dto=input_dto)
 
@@ -20,7 +20,7 @@ def _(repo=fake_branch_repo):
 
 
 @test("branch once created should not be open to modification")
-def _(repo=fake_branch_repo):
+def _(repo=fake_repo):
     input_dto = CreateBranchInputDto(name="story/AUS-101", base_branch="develop")
     CreateBranch(repo).execute(input_dto=input_dto)
 
