@@ -2,10 +2,13 @@ import os
 import re
 from enum import Enum
 
+import argh
 import inquirer
 from git.exc import GitCommandError
 from rich import pretty, traceback
+from rich.columns import Columns
 from rich.console import Console
+from rich.markdown import Markdown
 
 from .dto.create_branch import (
     AnswersToChangeBranchInputDto,
@@ -47,13 +50,13 @@ class CLIHandler:
 
     def handle_change_branch(self, answers: AnswersToChangeBranchInputDto):
         for app in answers.apps:
-            console.print(f"⚙ changing branch of {app} ..", style="bold blue")
+            console.log(f"⚙ changing branch of {app} ..", style="bold blue")
             repository = GitRepository(f"{self.project_root}/{app}")
 
             match_branch = self.json_repo.get_by_id(answers.ticket_id)
             if match_branch is None:
                 raise GitCommandError("No branch found with that id", "git branch -a")
-            console.print(f"⚙ checking out {match_branch} ..", style="bold orange1")
+            console.log(f"⚙ checking out {match_branch} ..", style="bold orange1")
             input_dto = CheckoutBranchInputDto(
                 name=match_branch.name_for_branch,
             )
@@ -69,7 +72,7 @@ class CLIHandler:
         ticket = CreateTicket(self.json_repo).execute(input_dto=ticket_input)
 
         for app in answers.apps:
-            console.print(f"⚙ creating branch on {app} ..", style="bold blue")
+            console.log(f"⚙ creating branch on {app} ..", style="bold blue")
             repository = GitRepository(f"{self.project_root}/{app}")
 
             questions = [
@@ -90,20 +93,20 @@ class CLIHandler:
             checkout_input_dto = CheckoutBranchInputDto(
                 name=answer["base_branch"],
             )
-            console.print(f"⚙ saving any unsaved changes", style="bold orange1")
+            console.log(f"⚙ saving any unsaved changes", style="bold orange1")
             repository.stash()
-            console.print(
+            console.log(
                 f"⚙ checking out {answer['base_branch']} ..", style="bold orange1"
             )
             CheckoutBranch(repository).execute(input_dto=checkout_input_dto)
-            console.print(f"⚙ pulling latest changes", style="bold orange1")
+            console.log(f"⚙ pulling latest changes", style="bold orange1")
             repository.pull()
             CreateBranch(repository).execute(input_dto=input_dto)
 
 
 class CLIAssistant:
     def __init__(self, action: str) -> None:
-        console.print(f":smiley: Hello there {user or 'friend'}!", style="bold green")
+        console.log(f":smiley: Hello there {user or 'friend'}!", style="bold green")
 
         self.alaya_root: str | None = None
         self.action = action
@@ -111,9 +114,7 @@ class CLIAssistant:
 
     def get_project_root(self):
         return (
-            str(BASEDIR / "dummy")
-            if DEBUG
-            else os.getenv("ALAYA_ROOT", self.alaya_root)
+            str(BASEDIR / "tmp") if DEBUG else os.getenv("ALAYA_ROOT", self.alaya_root)
         )
 
     def assist_first_time_user(self):
@@ -122,7 +123,7 @@ class CLIAssistant:
         self.questions = [
             inquirer.Text(
                 "alaya_path",
-                message="Full path of your Alaya directory (something like '/home/user/alaya') ",
+                message="Full path of your Alaya directory (something like '/home/user/path') ",
                 validate=lambda _, x: len(x) > 0,
             ),
         ]
@@ -130,7 +131,7 @@ class CLIAssistant:
             questions=self.questions, raise_keyboard_interrupt=True
         )
         get_or_create_env("ALAYA_ROOT", answers["alaya_path"])
-        console.print(
+        console.log(
             f":thumbs_up: All set! using {answers['alaya_path']} as your root dir",
             style="bold green",
         )
@@ -197,16 +198,27 @@ class CLIAssistant:
                 cli_handler.handle_change_branch(
                     AnswersToChangeBranchInputDto(**answers)
                 )
+            elif self.action == ACTIONS.INFO.value:
+                console.print(f"Your current project path: '{project_root}'")
+                console.print(
+                    f"Your current root branch is [green]'{self.root_repository.get()}'[/green]"
+                )
+                console.print(f"Your submodules status are: ")
+                console.print(
+                    Columns(self.root_repository.list(detailed=True)),
+                    style="bold green",
+                )
 
         except (ValueError, GitCommandError):
             console.print_exception()
         else:
-            console.print("✓ All done! 🍀", style="bold green")
+            console.log("✓ All done! 🍀", style="bold green")
 
 
+@argh.arg("action", choices=ACTIONS.all(), help="Action to perform")
 def app(action: str):
     CLIAssistant(action).run()
 
 
-if __name__ == "__main__":
-    app("change")
+def cli():
+    argh.dispatch_command(app)
