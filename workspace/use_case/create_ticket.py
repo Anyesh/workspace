@@ -4,7 +4,7 @@ from workspace.interface.repository import BaseRepository
 
 
 class CreateTicket:
-    def __init__(self, repository: BaseRepository | None):
+    def __init__(self, repository=None):
         self._repository = repository
 
     def execute(self, input_dto: CreateTicketInputDto) -> Ticket:
