@@ -64,10 +64,13 @@ class CLIService:
             repository = GitRepository(f"{self.__project_root}/{app}")
             any_match = repository.find_by_id(answers.ticket_id)
             if any_match:
+                # TODO: Remove this duplicate
                 console.print(
                     f"Branch already exists with same id {any_match}",
                     style="bold green",
                 )
+                console.log("⚙ saving any unsaved changes", style="bold orange1")
+                repository.stash()
                 console.print("Checking out to existing branch", style="bold green")
                 checkout_input_dto = CheckoutBranchInputDto(
                     name=any_match,
