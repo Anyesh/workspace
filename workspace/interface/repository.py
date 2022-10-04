@@ -29,7 +29,7 @@ class AbstractGitRepository(BaseRepository):
         ...
 
     @abstractmethod
-    def stash_pop(self, entity: Branch) -> None:
+    def stash_pop(self, entity_name: str) -> None:
         ...
 
     @abstractmethod
