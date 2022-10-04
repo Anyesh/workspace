@@ -10,6 +10,4 @@ class CheckoutBranch:
     def execute(self, input_dto: CheckoutBranchInputDto) -> None:
 
         branch = Branch(name=input_dto.name)
-        self._repository.stash()
-        self._repository.stash_pop(branch)
         self._repository.set(branch.name)
