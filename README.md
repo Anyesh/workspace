@@ -9,9 +9,7 @@
 
 # Installation
 
-There are many ways to install `workspace`.
-
-You can install it directly from github
+You can install `workspace` directly from github
 
 ```bash
 pip install git+https://github.com/Anyesh/workspace@develop#egg=workspace
@@ -44,7 +42,7 @@ Output:
 [14:48:24] 😃 Hello there <user>!                                                                                                                                                                                                     cli.py:109
 Looks like this is your first time here
 🦝 Let's get you set up
-[?] Full path of your Alaya directory (something like '/home/user/path') : /home/user/test/path
+[?] Full path of your Alaya directory (something like '/home/user/path/') : /home/user/test/path/
 [14:49:42] 👍 All set! using /home/user/test/path as your root dir
 ```
 
