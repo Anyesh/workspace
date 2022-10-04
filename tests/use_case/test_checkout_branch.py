@@ -15,17 +15,3 @@ def _(repo=fake_repo):
     CheckoutBranch(repo).execute(input_dto=input_dto)
 
     assert repo.get() == "story/AUS-101"
-
-
-# TODO: Similar test on create branch
-@test("checking out a branch calls stash and stash pop")
-def _(repo=fake_repo):
-    input_dto = CheckoutBranchInputDto(name="story/AUS-101")
-    CheckoutBranch(repo).execute(input_dto=input_dto)
-
-    assert repo.get() == "story/AUS-101"
-
-    repo_items = dict(Counter(repo))
-
-    assert repo_items["stash"] == 1
-    assert repo_items["stash_pop"] == 1
