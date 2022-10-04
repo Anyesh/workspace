@@ -43,10 +43,11 @@ class CLIAssistant:
         console.print("Looks like this is your first time here", style="bold orange4")
         console.print(":raccoon: Let's get you set up", style="bold orange4")
         self.questions = [
-            inquirer.Text(
+            inquirer.Path(
                 "alaya_path",
-                message="Full path of your Alaya directory (something like '/home/user/path') ",
+                message="Full path of your Alaya directory (something like '/home/user/path/') ",
                 validate=lambda _, x: len(x) > 0,
+                path_type=inquirer.Path.DIRECTORY,
             ),
         ]
         answers = inquirer.prompt(
@@ -94,6 +95,14 @@ class CLIAssistant:
         questions = self.common_questions()
         return inquirer.prompt(questions, raise_keyboard_interrupt=True)
 
+    @staticmethod
+    def _handle_reset():
+        if BASEDIR.isdir():
+            console.print("Removing workspace config files", style="bold red")
+            BASEDIR.rmtree()
+        else:
+            console.print("No config files found. Nothing to reset", style="bold red")
+
     def run(self) -> None:
         try:
             if self.__action not in Action.all():
@@ -130,8 +139,11 @@ class CLIAssistant:
                     Columns(self.__root_repository.list(detailed=True)),
                     style="bold green",
                 )
+            elif self.__action == Action.RESET.value:
+                self._handle_reset()
+
         except KeyboardInterrupt:
-            console.print("Seeya! Exiting...", style="green")
+            console.print("See ya! Exiting...", style="green")
         except InvalidGitRepositoryError:
             console.print("Invalid git repository provided", style="red")
         except (ValueError, GitCommandError):
