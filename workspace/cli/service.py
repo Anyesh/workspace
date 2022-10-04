@@ -62,6 +62,18 @@ class CLIService:
         for app in answers.apps:
             console.log(f"⚙ creating branch on {app} ..", style="bold blue")
             repository = GitRepository(f"{self.__project_root}/{app}")
+            any_match = repository.find_by_id(answers.ticket_id)
+            if any_match:
+                console.print(
+                    f"Branch already exists with same id {any_match}",
+                    style="bold green",
+                )
+                console.print("Checking out to existing branch", style="bold green")
+                checkout_input_dto = CheckoutBranchInputDto(
+                    name=any_match,
+                )
+                CheckoutBranch(repository).execute(input_dto=checkout_input_dto)
+                continue
 
             # TODO: Remove this coupling
             questions = [
