@@ -7,15 +7,18 @@ from typing import SupportsIndex
 from git import Head, Repo
 from workspace.entity.branch import Branch
 from workspace.interface.repository import AbstractGitRepository
+from workspace.repository.json_repository import JSONRepository
 
 
 # TODO: Modify repository to return Branch instance on get and list
 class GitRepository(AbstractGitRepository):
     def __init__(self, repo: str) -> None:
         self.repo = Repo(repo)
+        self._persistent_repo = JSONRepository()
 
     def create(self, entity: Branch):
         self.repo.git.checkout("-b", entity.name)
+        self._persistent_repo.create(entity.__dict__)
 
     def stash(self):
         current_branch = self.get()
@@ -46,6 +49,8 @@ class GitRepository(AbstractGitRepository):
 
     def pull(self):
         self.repo.git.pull()
+        for submodule in self.repo.submodules:
+            submodule.module().git.pull()
 
     def sync_submodules(self):
         self.repo.git.submodule("update")
@@ -68,7 +73,6 @@ class GitRepository(AbstractGitRepository):
                 break
         return match
 
-    @lru_cache
     def list(self) -> list[str]:
         return [
             ref.replace("*", "").strip() for ref in self.repo.git.branch().split("\n")
@@ -79,7 +83,6 @@ class SubModuleRepository(GitRepository):
     def __init__(self, repo: str) -> None:
         super().__init__(repo)
 
-    @lru_cache
     def list(self, detailed=False) -> list[str]:
         res = self.repo.git.execute(
             ["git", "submodule", "status"],
