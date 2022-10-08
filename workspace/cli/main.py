@@ -5,8 +5,9 @@ from .assistant import CLIAssistant
 
 
 @argh.arg("action", choices=Action.all(), help="Action to perform")
-def app(action: str):
-    CLIAssistant(action).run()
+@argh.arg("ticket_id", help="Ticket ID to use for the action", nargs="?")
+def app(action: str, ticket_id: str):
+    CLIAssistant(action, quick_ticket_id=ticket_id).run()
 
 
 def cli():

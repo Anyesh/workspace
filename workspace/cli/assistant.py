@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import os
 import re
+import shutil
 
 import inquirer
 from git import InvalidGitRepositoryError
@@ -16,21 +17,31 @@ from ..dto.create_branch import (
     AnswersToCreateBranchInputDto,
 )
 from ..entity.task import TaskType
+from ..exception.branch import GitBranchChangeException
 from ..repository.git_repository import SubModuleRepository
+from ..repository.json_repository import JSONRepository, save_answer
 from ..settings import BASEDIR, DEBUG
-from ..utils import get_loggedin_user, get_or_create_env, is_first_time_user
+from ..utils import (
+    common_choice_helper,
+    get_loggedin_user,
+    get_or_create_env,
+    is_first_time_user,
+    validate_ticket_id,
+)
 
 user = get_loggedin_user()
 console = Console()
 
 
 class CLIAssistant:
-    def __init__(self, action: str) -> None:
+    def __init__(self, action: str, quick_ticket_id: str | None = None) -> None:
         console.log(f":smiley: Hello there {user}!", style="bold green")
 
         self.__alaya_root: str | None = None
         self.__action = action
+        self.__quick_ticket_id = quick_ticket_id
         self.__root_repository: SubModuleRepository | None = None
+        self.__cache_repository = JSONRepository()
 
     def get_project_root(self):
         return (
@@ -65,15 +76,20 @@ class CLIAssistant:
             inquirer.Text(
                 "ticket_id",
                 message="Which Jira ticket are you working on?",
-                validate=lambda _, x: re.match(r"^[A-Za-z]+-\d+$", x),
+                validate=validate_ticket_id,
             ),
             inquirer.Checkbox(
                 "apps",
                 message="Which apps are you working on?",
-                choices=self.__root_repository.list(),
+                choices=common_choice_helper(
+                    self.__root_repository.list(),
+                    self.__cache_repository.get_most_common_apps(),
+                ),
+                validate=lambda _, x: len(x) > 0,
             ),
         ]
 
+    @save_answer(repository=JSONRepository())
     def assist_create_branch(self):
 
         questions = [
@@ -91,15 +107,16 @@ class CLIAssistant:
         ]
         return inquirer.prompt(questions, raise_keyboard_interrupt=True)
 
+    @save_answer(repository=JSONRepository())
     def assist_change_branch(self):
         questions = self.common_questions()
         return inquirer.prompt(questions, raise_keyboard_interrupt=True)
 
     @staticmethod
     def _handle_reset():
-        if BASEDIR.isdir():
-            console.print("Removing workspace config files", style="bold red")
-            BASEDIR.rmtree()
+        if BASEDIR.is_dir():
+            console.log("Removing workspace config files", style="bold red")
+            shutil.rmtree(BASEDIR, ignore_errors=True)
         else:
             console.print("No config files found. Nothing to reset", style="bold red")
 
@@ -125,7 +142,27 @@ class CLIAssistant:
                 )
 
             elif self.__action == Action.CHANGE.value:
-                answers = self.assist_change_branch()
+                if self.__quick_ticket_id:
+                    if not validate_ticket_id(None, self.__quick_ticket_id):
+                        return console.log(
+                            f"[ERROR] Invalid ticket id [bold red]{self.__quick_ticket_id}[/bold red]",
+                            style="red",
+                        )
+                    console.log(
+                        f"Quickly changing branch to {self.__quick_ticket_id} on recently used apps (if available)",
+                        style="bold blue",
+                    )
+                    if not self.__cache_repository.get_most_common_apps():
+                        return console.log(
+                            "[ERROR] No recent apps found. Please use regular [bold red]change[/bold red] action to select apps",
+                            style="red",
+                        )
+                    answers = {
+                        "ticket_id": self.__quick_ticket_id,
+                        "apps": self.__cache_repository.get_most_common_apps(),
+                    }
+                else:
+                    answers = self.assist_change_branch()
                 cli_handler.handle_change_branch(
                     AnswersToChangeBranchInputDto(**answers)
                 )
@@ -148,5 +185,7 @@ class CLIAssistant:
             console.print("Invalid git repository provided", style="red")
         except (ValueError, GitCommandError):
             console.print_exception()
+        except GitBranchChangeException:
+            pass
         else:
             console.log("✓ All done! 🍀", style="bold green")
