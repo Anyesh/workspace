@@ -118,6 +118,19 @@ Your submodules status are:
 [13:44:20] ✓ All done! 🍀
 ```
 
+## Want to quickly change branch?
+
+```bash
+ws change <ticket-id>
+
+Quickly changing branch to <ticket-id> on recently used apps (if available) assista
+[23:14:30] ⚙ changing branch submodule_2 ..
+           ⚙ checking out story/<ticket-id>-this-is-<ticket-id> ..
+           ⚙ changing branch of submodule_1 ..
+           Branch not found for submodule_1
+           ✓ All done! 🍀
+```
+
 ---
 
 If anything goes wrong, delete the `.workspace` folder in your home directory and try again.
