@@ -1,5 +1,6 @@
 import os
 import random
+import re
 import string
 
 from .settings import ENVDIR
@@ -40,3 +41,14 @@ def get_loggedin_user():
         return os.getlogin()
     except OSError:
         return "friend"
+
+
+def common_choice_helper(original_list: list, most_common: list) -> list:
+    seen = set()
+    valid_most_common = [x for x in most_common if x in original_list]
+    seq = [*valid_most_common, *original_list]
+    return [x for x in seq if x not in seen and not seen.add(x)]  # type: ignore
+
+
+def validate_ticket_id(_, ticket_id: str) -> bool:
+    return re.match(r"^[A-Za-z]+-\d+$", ticket_id) is not None
