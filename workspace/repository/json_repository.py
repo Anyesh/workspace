@@ -47,9 +47,6 @@ class JSONRepository(BaseRepository):
         return self.db.all()
 
 
-# persist result decorator
-
-
 def save_answer(repository: BaseRepository):
     def decorator(func):
         def wrapper(*args, **kwargs):
@@ -61,8 +58,3 @@ def save_answer(repository: BaseRepository):
         return wrapper
 
     return decorator
-
-
-jr = JSONRepository()
-print(jr.get_most_common_apps())
-print(jr.get_recent_branches())
