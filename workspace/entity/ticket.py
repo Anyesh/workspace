@@ -7,7 +7,7 @@ from .task import TaskType
 class Ticket:
     id: str
     description: str
-    type: str = field(default=TaskType.STORY.value)
+    type: TaskType = field(default=TaskType.STORY)
     name_for_branch: str = field(init=False)
 
     def __post_init__(self):

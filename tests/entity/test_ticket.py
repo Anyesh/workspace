@@ -6,7 +6,7 @@ from workspace.entity.ticket import Ticket
 @test("branch name is post initialized after all ticket attributes are provided")
 def _():
     t1 = Ticket(id="AUS-1", description="Ability to void sent claim")
-    t2 = Ticket(id="AUS-2", description="test", type=TaskType.SUBTASK.value)
+    t2 = Ticket(id="AUS-2", description="test", type=TaskType.SUBTASK)
     t3 = Ticket(
         id="AUS-3",
         description="test   ",

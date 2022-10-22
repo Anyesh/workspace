@@ -50,12 +50,12 @@ class CLIService:
         """Find a branch by id from local db and checkout that branch for all apps"""
 
         for app in answers.apps:
-            console.log(f"⚙ changing branch of {app} ..", style="bold blue")
+            console.print(f"⚙ changing branch of {app} ..", style="bold blue")
             repository = GitRepository(f"{self.__project_root}/{app}")
 
             match_branch = repository.find_by_id(answers.ticket_id)
             if match_branch is None:
-                console.log(f"Branch not found for {app}", style="bold red")
+                console.print(f"Branch not found for {app}", style="bold red")
                 continue
                 # raise GitBranchChangeException(
                 #     f"No branch found with id {answers.ticket_id}"
@@ -67,7 +67,7 @@ class CLIService:
             # Popping any previos saved changes
             repository.stash_pop(match_branch)
             input_dto = CheckoutBranchInputDto(name=match_branch)
-            console.log(f"⚙ checking out {match_branch} ..", style="bold blue")
+            console.print(f"⚙ checking out {match_branch} ..", style="bold blue")
             CheckoutBranch(repository).execute(input_dto=input_dto)
 
     def handle_create_branch(self, answers: AnswersToCreateBranchInputDto) -> None:
@@ -82,7 +82,7 @@ class CLIService:
         ticket = CreateTicket(None).execute(input_dto=ticket_input)
 
         for app in answers.apps:
-            console.log(f"⚙ creating branch on {app} ..", style="bold blue")
+            console.print(f"⚙ creating branch on {app} ..", style="bold blue")
             repository = GitRepository(f"{self.__project_root}/{app}")
             any_match = repository.find_by_id(answers.ticket_id)
             if any_match:
@@ -91,7 +91,7 @@ class CLIService:
                     f"Branch already exists with same id {any_match}",
                     style="bold green",
                 )
-                console.log("⚙ saving any unsaved changes", style="bold blue")
+                console.print("⚙ saving any unsaved changes", style="bold blue")
                 repository.stash()
                 console.print("Checking out to existing branch", style="bold green")
                 checkout_input_dto = CheckoutBranchInputDto(
@@ -108,23 +108,23 @@ class CLIService:
             checkout_input_dto = CheckoutBranchInputDto(
                 name=base_branch_answer["base_branch"],
             )
-            console.log("⚙ saving any unsaved changes", style="bold orange1")
+            console.print("⚙ saving any unsaved changes", style="bold orange1")
             repository.stash()
-            console.log(
+            console.print(
                 f"⚙ checking out '{base_branch_answer['base_branch']}' ..",
                 style="bold green",
             )
             CheckoutBranch(repository).execute(input_dto=checkout_input_dto)
-            console.log("⚙ pulling latest changes", style="bold blue")
+            console.print("⚙ pulling latest changes", style="bold blue")
 
             if repository.get().tracking_branch() is None:
-                console.log(
+                console.print(
                     "⚠ no tracking branch found. Nothing to pull.", style="bold orange1"
                 )
             else:
                 repository.pull()
             repository.sync_submodules()
             CreateBranch(repository).execute(input_dto=input_dto)
-            console.log(
+            console.print(
                 f"⚙ checking out {ticket.name_for_branch} ..", style="bold blue"
             )

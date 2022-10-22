@@ -12,17 +12,17 @@ from workspace.use_case.create_ticket import CreateTicket
 @test("create a ticket happy path")
 def _():
     input_dto = CreateTicketInputDto(
-        id="aus-101", description="test test", type=TaskType.STORY.value
+        id="aus-101", description="test test", type=TaskType.STORY
     )
     ticket = CreateTicket(None).execute(input_dto=input_dto)
 
     assert isinstance(ticket, Ticket)
 
 
-@test("creating a ticket creates name for branch from it's description and id")
+@test("creating a ticket creates name for branch from its description and id")
 def _():
     input_dto = CreateTicketInputDto(
-        id="aus-101", description="test test", type=TaskType.STORY.value
+        id="aus-101", description="test test", type=TaskType.STORY
     )
     ticket = CreateTicket(None).execute(input_dto=input_dto)
 

@@ -2,7 +2,7 @@ from __future__ import annotations
 
 import re
 from functools import lru_cache
-from typing import SupportsIndex
+import subprocess
 
 from git import Head, Repo
 from workspace.entity.branch import Branch
@@ -57,6 +57,9 @@ class GitRepository(AbstractGitRepository):
 
     def get(self) -> Head:
         return self.repo.active_branch
+
+    def get_info(self) -> str:
+        ...
 
     def set(self, entity_name: str):
         self.repo.git.checkout(entity_name)

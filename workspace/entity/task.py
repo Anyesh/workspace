@@ -1,7 +1,7 @@
 from enum import Enum
 
 
-class TaskType(Enum):
+class TaskType(str, Enum):
     STORY = "story"
     SUBTASK = "subtask"
     BUGFIX = "bugfix"

@@ -34,8 +34,8 @@ console = Console()
 
 
 class CLIAssistant:
-    def __init__(self, action: str, quick_ticket_id: str | None = None) -> None:
-        console.log(f":smiley: Hello there {user}!", style="bold green")
+    def __init__(self, action: Action, quick_ticket_id: str | None = None) -> None:
+        console.print(f":smiley: Hello there {user}!", style="bold green")
 
         self.__alaya_root: str | None = None
         self.__action = action
@@ -65,7 +65,7 @@ class CLIAssistant:
             questions=self.questions, raise_keyboard_interrupt=True
         )
         get_or_create_env("ALAYA_ROOT", answers["alaya_path"])
-        console.log(
+        console.print(
             f":thumbs_up: All set! using {answers['alaya_path']} as your root dir",
             style="bold green",
         )
@@ -115,7 +115,7 @@ class CLIAssistant:
     @staticmethod
     def _handle_reset():
         if BASEDIR.is_dir():
-            console.log("Removing workspace config files", style="bold red")
+            console.print("Removing workspace config files", style="bold red")
             shutil.rmtree(BASEDIR, ignore_errors=True)
         else:
             console.print("No config files found. Nothing to reset", style="bold red")
@@ -135,25 +135,25 @@ class CLIAssistant:
             cli_handler = CLIService(project_root)
             self.__root_repository = SubModuleRepository(project_root)
 
-            if self.__action == Action.CREATE.value:
+            if self.__action == Action.CREATE:
                 answers = self.assist_create_branch()
                 cli_handler.handle_create_branch(
                     AnswersToCreateBranchInputDto(**answers)
                 )
 
-            elif self.__action == Action.CHANGE.value:
+            elif self.__action == Action.CHANGE:
                 if self.__quick_ticket_id:
                     if not validate_ticket_id(None, self.__quick_ticket_id):
-                        return console.log(
+                        return console.print(
                             f"[ERROR] Invalid ticket id [bold red]{self.__quick_ticket_id}[/bold red]",
                             style="red",
                         )
-                    console.log(
+                    console.print(
                         f"Quickly changing branch to {self.__quick_ticket_id} on recently used apps (if available)",
                         style="bold blue",
                     )
                     if not self.__cache_repository.get_most_common_apps():
-                        return console.log(
+                        return console.print(
                             "[ERROR] No recent apps found. Please use regular [bold red]change[/bold red] action to select apps",
                             style="red",
                         )
@@ -166,7 +166,7 @@ class CLIAssistant:
                 cli_handler.handle_change_branch(
                     AnswersToChangeBranchInputDto(**answers)
                 )
-            elif self.__action == Action.INFO.value:
+            elif self.__action == Action.INFO:
                 console.print(f"Your current project path: '{project_root}'")
                 console.print(
                     f"Your current root branch is [green]'{self.__root_repository.get()}'[/green]"
@@ -176,7 +176,7 @@ class CLIAssistant:
                     Columns(self.__root_repository.list(detailed=True)),
                     style="bold green",
                 )
-            elif self.__action == Action.RESET.value:
+            elif self.__action == Action.RESET:
                 self._handle_reset()
 
         except KeyboardInterrupt:
@@ -188,4 +188,4 @@ class CLIAssistant:
         except GitBranchChangeException:
             pass
         else:
-            console.log("✓ All done! 🍀", style="bold green")
+            console.print("✓ All done! 🍀", style="bold green")

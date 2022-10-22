@@ -8,7 +8,7 @@ def read_file(name):
 
 setup(
     name="workspace",
-    version="0.1.1",
+    version="0.1.2",
     description=("my workspace"),
     author="Anish Shrestha",
     author_email="connect@anyesh.me",
