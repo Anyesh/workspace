@@ -50,7 +50,7 @@ class GitRepository(AbstractGitRepository):
     def pull(self):
         self.repo.git.pull()
         for submodule in self.repo.submodules:
-            submodule.module().git.pull()
+            submodule.module().git.pull("origin", submodule.branch())
 
     def sync_submodules(self):
         self.repo.git.submodule("update")
